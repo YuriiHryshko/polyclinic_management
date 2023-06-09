@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: ec2-54-195-144-105.eu-west-1.compute.amazonaws.com
+  port: 5432
+  database: d5mchbdn09a737
+  username: lnippymahaxnfi
+  password: 795bdb7609a0cb68f26e833b6ac99966ddd44e0c2b1179355942b518e91185aa
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+

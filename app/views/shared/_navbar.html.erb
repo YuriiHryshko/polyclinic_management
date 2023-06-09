@@ -1,0 +1,25 @@
+<nav class="bg-blue-400">
+  <div class="container mx-auto">
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center space-x-4">
+        <%= link_to pages_home_path do %>
+          <img src="https://clinic-managment.s3.eu-west-3.amazonaws.com/clinic.svg" alt="Clinic Logo" class="h-8">
+        <% end %>
+
+        <% if user_signed_in? %>
+          <% if current_user.is_a_doctor? %>
+            <a class="text-white hover:text-blue-200" href="#"><%= link_to 'My Profile', doctor_path(current_user.profile) %></a>
+          <% else %>
+            <a class="text-white hover:text-blue-200" href="#"><%= link_to 'My Profile', patient_path(current_user.profile) %></a>
+            <a class="text-white hover:text-blue-200" href="#"><%= link_to 'Doctors List', doctors_path %></a>
+          <% end %>
+          <a class="text-white hover:text-blue-200" href="#"><%= link_to 'Appointments', appointments_path %></a>
+          <a class="text-white hover:text-blue-200" href="#"><%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete } %></a>
+        <% else %>
+          <a class="text-white hover:text-blue-200" href="#"><%= link_to 'Sign In', new_user_session_path %></a>
+          <a class="text-white hover:text-blue-200" href="#"><%= link_to 'Sign Up', new_user_registration_path %></a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>

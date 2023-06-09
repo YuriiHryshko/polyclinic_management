@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Clinic</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+
+   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>  <%# this loads Sprockets/Rails asset pipeline %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <%= render 'shared/navbar' %>
+    <% if notice.present? %>
+      <p class="notice bg-green-200 text-green-800 px-4 py-2 rounded-md"><%= notice %></p>
+    <% end %>
+
+    <% if alert.present? %>
+      <p class="alert bg-red-200 text-red-800 px-4 py-2 rounded-md"><%= alert %></p>
+    <% end %>
+    <%= yield %>
+    <%= render 'shared/footer' %>
+  </body>
+</html>

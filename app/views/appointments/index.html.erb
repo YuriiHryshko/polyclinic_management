@@ -1,0 +1,71 @@
+<div class="h-screen mt-0">
+
+<h1 class="text-4xl font-bold text-blue-500">My Appointments</h1>
+<%= form_tag(appointments_path, method: "get", class: "mb-4") do %>
+      <%= select_tag(:status, options_for_select([["All", ""], ["Open", "0"], ["Closed", "1"]], params[:status]), class: "w-52 border border-gray-300 rounded-md px-4 py-2 mr-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500") %>
+      <%= submit_tag("Filter", class: "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600") %>
+    <% end %>
+<% if current_user.profile_type == 'Patient' %>
+  <% if @appointments.any? %>
+    <ul class= "h-[34rem] overflow-y-auto">
+      <% @appointments.each do |appointment| %>
+  <li class="bg-gray-100 rounded-lg p-4 mb-4">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center">
+      <div class="mr-4">
+        <img src="<%= appointment.doctor.avatar.url %>" alt="Doctor Avatar" class="object-cover object-center w-16 h-16 rounded-full">
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold">
+          <%= link_to appointment.doctor.full_name, appointment %>
+        </h3>
+        <p class="text-gray-500">
+          <%= appointment.doctor.categories.pluck(:title).join(", ") %>
+        </p>
+      </div>
+    </div>
+    <div>
+      <% if appointment.open? %>
+        <span class="bg-green-500 text-white px-2 py-1 rounded-full">Open</span>
+      <% elsif appointment.closed? %>
+        <span class="bg-red-500 text-white px-2 py-1 rounded-full">Closed</span>
+      <% end %>
+    </div>
+  </div>
+</li>
+
+<% end %>
+
+    </ul>
+  <% else %>
+    <p class="text-gray-500">You don't have any appointments yet.</p>
+  <% end %>
+<% elsif current_user.profile_type == 'Doctor' %>
+  <% if @appointments.any? %>
+    <ul class= "h-[30rem] overflow-y-auto">
+      <% @appointments.each do |appointment| %>
+  <li class="bg-gray-100 rounded-lg p-4 mb-4">
+    <div class="flex items-center justify-between">
+      <div>
+      <h3 class="text-lg font-semibold">
+      <%= link_to appointment.patient.full_name, appointment %>
+    </h3> 
+    <p class="text-gray-500"><%= appointment.patient.email %></p>
+      </div>
+      <div>
+        <% if appointment.open? %>
+          <span class="bg-green-500 text-white px-2 py-1 rounded-full">Open</span>
+        <% elsif appointment.closed? %>
+          <span class="bg-red-500 text-white px-2 py-1 rounded-full">Closed</span>
+        <% end %>
+      </div>
+    </div>
+  </li>
+<% end %>
+
+    </ul>
+  <% else %>
+    <p class="text-gray-500">You don't have any appointments yet.</p>
+  <% end %>
+<% end %>
+</div>

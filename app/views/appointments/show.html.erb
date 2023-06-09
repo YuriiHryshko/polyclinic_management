@@ -1,0 +1,65 @@
+<section class="appointment-details mt-20 h-380 mb-80">
+  <div class="flex justify-center">
+    <div class="max-w-xl p-8 sm:flex sm:space-x-6 bg-blue-300 text-white dark:bg-white-900 dark:text-white-100 rounded">
+      <% if current_user.profile_type == 'Patient' %>
+        <div class="flex items-center space-x-6">
+          <div class="flex-shrink-0 w-32 h-32">
+            <img src="<%= @appointment.doctor.avatar.url %>" alt="Doctor Avatar" class="object-cover object-center w-full h-full rounded dark:bg-white">
+          </div>
+          <div class="flex flex-col space-y-4">
+            <div>
+              <h2 class="text-2xl font-semibold"><%= link_to @appointment.doctor.full_name, @appointment.doctor %></h2>
+              <span class="text-sm dark:text-white-400"><%= @appointment.doctor.categories.pluck(:title).join(", ") %></span>
+            </div>
+            <div class="mb-4">
+              <% if @appointment.open? %>
+                <span class="bg-green-500 text-white px-2 py-1 rounded-full">Open</span>
+              <% elsif @appointment.closed? %>
+                <span class="bg-red-500 text-white px-2 py-1 rounded-full">Closed</span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <% if @appointment.recommendation %>
+            <h3 class="text-lg font-semibold">Doctor's recommendation</h3>
+            <p><%= @appointment.recommendation.text %></p>
+          <% else %>
+            <p>The doctor has not yet given a recommendation.</p>
+          <% end %>
+        </div>
+      <% elsif current_user.profile_type == 'Doctor' %>
+        <div class="flex items-center space-x-6">
+          <div class="flex flex-col space-y-4">
+            <div>
+              <h2 class="text-2xl font-semibold"><%= link_to @appointment.patient.full_name, @appointment.patient %></h2>
+              <h4 class="text-2xl"><%= @appointment.patient.phone %></h4>
+
+            </div>
+            <div class="mb-4">
+              <% if @appointment.open? %>
+                <span class="bg-green-500 text-white px-2 py-1 rounded-full">Open</span>
+              <% elsif @appointment.closed? %>
+                <span class="bg-red-500 text-white px-2 py-1 rounded-full">Closed</span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <% if @appointment.recommendation %>
+            <h3 class="text-lg font-semibold">Doctor's recommendation</h3>
+            <p><%= @appointment.recommendation.text %></p>
+          <% else %>
+            <%= form_for [@appointment, @appointment.build_recommendation], url: appointment_recommendations_path(@appointment), method: :post do |f| %>
+            <div class="field">
+              <%= f.label :text, 'Recommendation Text', class: 'block font-semibold' %>
+            <%= f.text_area :text, rows: 3, class: 'form-control mt-2 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black' %>
+            </div>
+            <%= f.submit 'Create Recommendation', class: 'btn btn-primary mt-4 py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:bg-blue-600' %>
+          <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
